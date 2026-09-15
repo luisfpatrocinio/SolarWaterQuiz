@@ -141,8 +141,13 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # Permitir sair do Fullscreen pressionando ESC
-                    running = False
+                if event.key == pygame.K_ESCAPE:
+                    if current_state == STATE_MENU:
+                        running = False
+                    else:
+                        current_state = STATE_MENU
+                        current_question_index = 0
+                        score = 0
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1: # Clique do botão esquerdo
                     mouse_clicked = True
@@ -217,7 +222,7 @@ def main():
         elif current_state == STATE_FEEDBACK:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
             
-            msg = "RESPOSTA CORRETA! 🎉" if is_correct else "RESPOSTA INCORRETA! 😢"
+            msg = "RESPOSTA CORRETA!" if is_correct else "RESPOSTA INCORRETA!"
             color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
             
             draw_text_center(msg, font_title, color_msg, 200)
