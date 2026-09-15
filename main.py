@@ -242,16 +242,21 @@ def main():
         elif current_state == STATE_FEEDBACK:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
             
+            # 1. Desenhar a pergunta no topo para manter o contexto
+            theme_color = COLOR_BTN_SOLAR if current_quiz == "4ano" else COLOR_BTN_WATER
+            next_y = draw_text_wrapped(question_data["pergunta"], font_button, theme_color, 80, SCREEN_WIDTH - 200)
+            
+            # 2. Status de Acerto/Erro
             msg = "RESPOSTA CORRETA!" if is_correct else "RESPOSTA INCORRETA!"
             color_msg = COLOR_CORRECT if is_correct else COLOR_WRONG
             
-            draw_text_center(msg, font_title, color_msg, 120)
+            draw_text_center(msg, font_title, color_msg, next_y + 80)
             
-            # Mostrar curiosidade
+            # 3. Mostrar curiosidade (justificativa)
             curiosidade = question_data["curiosidade"]
-            next_y = draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 220, SCREEN_WIDTH - 300)
+            next_y = draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, next_y + 180, SCREEN_WIDTH - 300)
             
-            button_y = max(550, next_y + 60)
+            button_y = max(550, next_y + 80)
             
             # Botão Saiba Mais (Link)
             link = question_data.get("link", "")
