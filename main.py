@@ -162,6 +162,26 @@ def main():
                         current_question_index = 0
                         score = 0
                         change_state(STATE_MENU)
+                elif event.key == pygame.K_RIGHT:
+                    if current_state in [STATE_QUESTION, STATE_FEEDBACK]:
+                        current_question_index += 1
+                        if current_question_index >= len(QUIZ_DATA[current_quiz]):
+                            change_state(STATE_END)
+                        else:
+                            change_state(STATE_QUESTION)
+                elif event.key == pygame.K_LEFT:
+                    if current_state in [STATE_QUESTION, STATE_FEEDBACK]:
+                        current_question_index -= 1
+                        if current_question_index < 0:
+                            current_question_index = 0
+                        change_state(STATE_QUESTION)
+                elif event.key in [pygame.K_SPACE, pygame.K_RETURN]:
+                    if current_state == STATE_FEEDBACK:
+                        current_question_index += 1
+                        if current_question_index >= len(QUIZ_DATA[current_quiz]):
+                            change_state(STATE_END)
+                        else:
+                            change_state(STATE_QUESTION)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1 and not is_transitioning: # Clique do botão esquerdo
                     mouse_clicked = True
@@ -229,15 +249,38 @@ def main():
                 
             draw_text_center(f"Pontuação da Sala: {score}", font_button, COLOR_CORRECT, SCREEN_HEIGHT - 60)
             
+            # Botões de Navegação (Anterior / Próximo)
+            btn_nav_w = 250
+            btn_nav_h = 80
+            btn_prev_rect = pygame.Rect(50, SCREEN_HEIGHT - 120, btn_nav_w, btn_nav_h)
+            btn_next_rect = pygame.Rect(SCREEN_WIDTH - btn_nav_w - 50, SCREEN_HEIGHT - 120, btn_nav_w, btn_nav_h)
+            
+            if current_question_index > 0:
+                color_prev = COLOR_BTN_HOVER if btn_prev_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
+                draw_button(btn_prev_rect, color_prev, "< Anterior", font_button, COLOR_TEXT)
+            
+            color_next = COLOR_BTN_HOVER if btn_next_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
+            draw_button(btn_next_rect, color_next, "Próximo >", font_button, COLOR_TEXT)
+            
             if mouse_clicked:
-                for rect, option_text in option_rects:
-                    if rect.collidepoint(mouse_pos):
-                        if option_text == question_data["resposta"]:
-                            score += 1
-                            is_correct = True
-                        else:
-                            is_correct = False
-                        change_state(STATE_FEEDBACK)
+                if current_question_index > 0 and btn_prev_rect.collidepoint(mouse_pos):
+                    current_question_index -= 1
+                    change_state(STATE_QUESTION)
+                elif btn_next_rect.collidepoint(mouse_pos):
+                    current_question_index += 1
+                    if current_question_index >= len(QUIZ_DATA[current_quiz]):
+                        change_state(STATE_END)
+                    else:
+                        change_state(STATE_QUESTION)
+                else:
+                    for rect, option_text in option_rects:
+                        if rect.collidepoint(mouse_pos):
+                            if option_text == question_data["resposta"]:
+                                score += 1
+                                is_correct = True
+                            else:
+                                is_correct = False
+                            change_state(STATE_FEEDBACK)
             
         elif current_state == STATE_FEEDBACK:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
