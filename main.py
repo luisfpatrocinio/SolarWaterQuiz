@@ -12,12 +12,15 @@ pygame.font.init()
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
 
-# Cores (Alto contraste e vibrantes)
-COLOR_BG = (30, 30, 50)       # Fundo escuro azulado
-COLOR_TEXT = (255, 255, 255)  # Texto branco
-COLOR_BTN_4ANO = (255, 150, 50) # Laranja vibrante
-COLOR_BTN_5ANO = (50, 150, 255) # Azul vibrante
-COLOR_BTN_HOVER = (200, 200, 200)
+# Cores (Paleta Neon Maker)
+COLOR_BG = "#1E1E2F"          # Fundo escuro/Navy
+COLOR_TEXT = "#F8F9FA"        # Branco Puro / Gelo
+COLOR_BTN_SOLAR = "#FF9F1C"   # Laranja Vibrante
+COLOR_BTN_WATER = "#00B4D8"   # Ciano/Azul Claro
+COLOR_CORRECT = "#2ECC71"     # Verde Neon
+COLOR_WRONG = "#E74C3C"       # Vermelho Vibrante
+COLOR_BTN_OPTION = "#2B2D42"  # Cinza escuro azulado
+COLOR_BTN_HOVER = "#4A4D6D"   # Hover padrão para opções
 
 # Inicia a tela sem bordas, mas escalada para preencher a tela atual
 is_fullscreen = True
@@ -25,15 +28,16 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME |
 pygame.display.set_caption("Quiz Maker - Educacional")
 clock = pygame.time.Clock()
 
-# Fontes (Grandes para Datashow)
-try:
-    font_title = pygame.font.SysFont("arial", 90, bold=True)
-    font_button = pygame.font.SysFont("arial", 45, bold=True)
-    font_option = pygame.font.SysFont("arial", 35, bold=True)
-except:
-    font_title = pygame.font.Font(None, 90)
-    font_button = pygame.font.Font(None, 45)
-    font_option = pygame.font.Font(None, 35)
+# --- CARREGAMENTO DE FONTES ---
+def get_font(size):
+    try:
+        return pygame.font.Font("assets/fonte.ttf", size)
+    except:
+        return pygame.font.SysFont("arial", size, bold=True)
+
+font_title = get_font(90)
+font_button = get_font(45)
+font_option = get_font(35)
 
 # --- CARREGAMENTO DOS DADOS ---
 def load_questions():
@@ -95,9 +99,9 @@ def draw_text_center(text, font, color, y_pos):
     screen.blit(text_surface, text_rect)
 
 def draw_button(rect, color, text, font, text_color):
-    pygame.draw.rect(screen, color, rect, border_radius=20)
-    # Adicionando um leve brilho/borda
-    pygame.draw.rect(screen, (255, 255, 255), rect, width=4, border_radius=20)
+    pygame.draw.rect(screen, color, rect, border_radius=15)
+    # Adicionando um leve brilho/borda (Branco)
+    pygame.draw.rect(screen, "#FFFFFF", rect, width=3, border_radius=15)
     
     text_surface = font.render(text, True, text_color)
     text_rect = text_surface.get_rect(center=rect.center)
@@ -146,16 +150,16 @@ def main():
         
         # Lógica de Renderização por Estado
         if current_state == STATE_MENU:
-            draw_text_center("QUIZ MAKER", font_title, (255, 220, 50), 200)
+            draw_text_center("QUIZ MAKER", font_title, COLOR_BTN_SOLAR, 200)
             
             # Checar hover (mouse em cima do botão) e desenhar
-            color_4 = COLOR_BTN_HOVER if btn_4ano_rect.collidepoint(mouse_pos) else COLOR_BTN_4ANO
+            color_4 = "#FFAF40" if btn_4ano_rect.collidepoint(mouse_pos) else COLOR_BTN_SOLAR
             draw_button(btn_4ano_rect, color_4, "4º Ano - Desafio Solar", font_button, COLOR_TEXT)
             
-            color_5 = COLOR_BTN_HOVER if btn_5ano_rect.collidepoint(mouse_pos) else COLOR_BTN_5ANO
+            color_5 = "#33C3F0" if btn_5ano_rect.collidepoint(mouse_pos) else COLOR_BTN_WATER
             draw_button(btn_5ano_rect, color_5, "5º Ano - A Água Invisível", font_button, COLOR_TEXT)
             
-            color_sair = COLOR_BTN_HOVER if btn_sair_rect.collidepoint(mouse_pos) else (100, 100, 100)
+            color_sair = COLOR_BTN_HOVER if btn_sair_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
             draw_button(btn_sair_rect, color_sair, "Sair", font_button, COLOR_TEXT)
             
             # Lógica de Clique no Menu
@@ -175,12 +179,15 @@ def main():
                     
         elif current_state == STATE_QUESTION:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
-            next_y = draw_text_wrapped(question_data["pergunta"], font_title, COLOR_TEXT, 100, SCREEN_WIDTH - 200)
+            
+            # Identidade Visual da Turma
+            theme_color = COLOR_BTN_SOLAR if current_quiz == "4ano" else COLOR_BTN_WATER
+            next_y = draw_text_wrapped(question_data["pergunta"], font_title, theme_color, 100, SCREEN_WIDTH - 200)
             
             options = question_data["opcoes"]
             num_options = len(options)
             
-            # Botões das opções dispostos VERTICALMENTE para caber textos longos
+            # Botões das opções dispostos VERTICALMENTE
             btn_w = 1400
             btn_h = 100
             spacing = 30
@@ -192,10 +199,10 @@ def main():
                 option_rects.append((rect, option_text))
                 
                 # Check hover
-                color = COLOR_BTN_HOVER if rect.collidepoint(mouse_pos) else (COLOR_BTN_4ANO if current_quiz == "4ano" else COLOR_BTN_5ANO)
+                color = COLOR_BTN_HOVER if rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
                 draw_button(rect, color, option_text, font_option, COLOR_TEXT)
                 
-            draw_text_center(f"Pontuação da Sala: {score}", font_button, (200, 255, 200), SCREEN_HEIGHT - 60)
+            draw_text_center(f"Pontuação da Sala: {score}", font_button, COLOR_CORRECT, SCREEN_HEIGHT - 60)
             
             if mouse_clicked:
                 for rect, option_text in option_rects:
@@ -211,7 +218,7 @@ def main():
             question_data = QUIZ_DATA[current_quiz][current_question_index]
             
             msg = "RESPOSTA CORRETA!" if is_correct else "RESPOSTA INCORRETA!"
-            color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
+            color_msg = COLOR_CORRECT if is_correct else COLOR_WRONG
             
             draw_text_center(msg, font_title, color_msg, 120)
             
@@ -226,13 +233,13 @@ def main():
             btn_link_rect = None
             if link != "":
                 btn_link_rect = pygame.Rect(SCREEN_WIDTH // 2 - 400, button_y, 800, 80)
-                color_link = COLOR_BTN_HOVER if btn_link_rect.collidepoint(mouse_pos) else (200, 100, 200)
+                color_link = "#8E44AD" if btn_link_rect.collidepoint(mouse_pos) else "#9B59B6"
                 draw_button(btn_link_rect, color_link, "[ Assistir Vídeo / Saiba Mais ]", font_button, COLOR_TEXT)
                 button_y += 120
             
             # Botão Avançar
             btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, button_y, 400, 100)
-            color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else (150, 150, 150)
+            color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
             draw_button(btn_avancar_rect, color_avancar, "Avançar", font_button, COLOR_TEXT)
             
             if mouse_clicked:
@@ -246,7 +253,7 @@ def main():
                     webbrowser.open(link)
         
         elif current_state == STATE_END:
-            draw_text_center("FIM DE JOGO, TURMA!", font_title, (255, 220, 50), 300)
+            draw_text_center("FIM DE JOGO, TURMA!", font_title, COLOR_BTN_SOLAR, 300)
             
             total_perguntas = len(QUIZ_DATA[current_quiz])
             score_text = f"Vocês acertaram {score} de {total_perguntas} perguntas!"
@@ -254,7 +261,7 @@ def main():
             
             # Botão Voltar ao Menu
             btn_voltar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 300, 750, 600, 120)
-            color_voltar = COLOR_BTN_HOVER if btn_voltar_rect.collidepoint(mouse_pos) else (50, 150, 255)
+            color_voltar = COLOR_BTN_HOVER if btn_voltar_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
             draw_button(btn_voltar_rect, color_voltar, "Voltar ao Menu", font_button, COLOR_TEXT)
             
             if mouse_clicked and btn_voltar_rect.collidepoint(mouse_pos):
