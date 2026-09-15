@@ -1,42 +1,146 @@
 {
-    "4ano": [
-        {
-            "pergunta": "Placa solar funciona em dias nublados e com chuva.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Verdade",
-            "curiosidade": "Gera menos energia, mas a luz que atravessa a nuvem ainda gera eletricidade!"
-        },
-        {
-            "pergunta": "As placas solares duram para sempre.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Mito",
-            "curiosidade": "Elas duram de 25 a 30 anos, depois precisam ser recicladas."
-        },
-        {
-            "pergunta": "Dá para usar energia solar à noite.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Verdade",
-            "curiosidade": "Sim! Mas só se você tiver guardado a energia durante o dia em baterias gigantes."
-        }
-    ],
-    "5ano": [
-        {
-            "pergunta": "Quantos litros de água são gastos para fazer UMA calça jeans?",
-            "opcoes": ["100 Litros", "1.000 Litros", "10.000 Litros"],
-            "resposta": "10.000 Litros",
-            "curiosidade": "A plantação do algodão e as fábricas de tecido consomem muita água!"
-        },
-        {
-            "pergunta": "Quantos litros de água para fazer UM Hambúrguer de carne?",
-            "opcoes": ["500 Litros", "2.400 Litros", "10.000 Litros"],
-            "resposta": "2.400 Litros",
-            "curiosidade": "O boi bebe muita água e come muita grama que precisou ser irrigada."
-        },
-        {
-            "pergunta": "Quantos litros de água para fabricar UM Smartphone?",
-            "opcoes": ["10 Litros", "500 Litros", "12.000 Litros"],
-            "resposta": "12.000 Litros",
-            "curiosidade": "A mineração dos metais preciosos do celular exige rios inteiros de água."
-        }
-    ]
+  "4ano": [
+    {
+      "pergunta": "A placa solar continua gerando energia em dias nublados e com chuva.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "Gera menos energia, mas a luz que atravessa a nuvem ainda é suficiente para gerar eletricidade!",
+      "link": ""
+    },
+    {
+      "pergunta": "As placas solares duram para sempre e nunca quebram.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Mito",
+      "curiosidade": "Elas duram bastante (de 25 a 30 anos), mas depois disso precisam ser recicladas.",
+      "link": ""
+    },
+    {
+      "pergunta": "A energia do Sol que atinge a Terra em apenas 1 hora sustenta o mundo por 1 ano inteiro.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "O Sol é uma fonte de energia absurdamente gigante. Se conseguíssemos capturar tudo, não faltaria energia nunca!",
+      "link": ""
+    },
+    {
+      "pergunta": "Existe um Forno Solar gigante que consegue derreter uma chapa de aço em segundos.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "Fica na França (Forno de Odeillo). Ele usa milhares de espelhos para focar a luz do sol em um único ponto, atingindo 3.500 °C!",
+      "link": "https://www.youtube.com/results?search_query=forno+solar+de+odeillo+derretendo+metal"
+    },
+    {
+      "pergunta": "Se você colocar um LED (luzinha) debaixo de um sol muito forte, ele gera um pouquinho de energia.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "O LED é feito do mesmo material da placa solar! Se ele recebe luz, ele faz o caminho inverso e gera uma micro corrente elétrica.",
+      "link": ""
+    },
+    {
+      "pergunta": "No deserto da Austrália existe uma corrida famosa de carros movidos apenas a energia solar.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "Chama-se World Solar Challenge. Os carros parecem naves espaciais achatadas para caber mais placas no teto!",
+      "link": "https://www.youtube.com/results?search_query=world+solar+challenge"
+    },
+    {
+      "pergunta": "A Estação Espacial Internacional (ISS) precisa ser abastecida com gasolina toda semana.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Mito",
+      "curiosidade": "Não existe posto de gasolina no espaço! A Estação tem 'asas' gigantes que são painéis solares para manter os computadores ligados.",
+      "link": "https://www.youtube.com/results?search_query=iss+solar+panels"
+    },
+    {
+      "pergunta": "Gerar energia solar faz muito barulho e solta fumaça no meio ambiente.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Mito",
+      "curiosidade": "A energia solar é 100% limpa, silenciosa e não polui o ar da nossa cidade.",
+      "link": ""
+    },
+    {
+      "pergunta": "Na natureza, a Vespa Oriental tem uma faixa na barriga que funciona como um painel solar.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "A natureza é incrível! O inseto usa essa energia do sol para ganhar força e cavar túneis mais rápido.",
+      "link": "https://www.youtube.com/results?search_query=vespa+oriental+energia+solar"
+    },
+    {
+      "pergunta": "Dá para usar energia solar à noite dentro de casa.",
+      "opcoes": ["Mito", "Verdade"],
+      "resposta": "Verdade",
+      "curiosidade": "Sim! Mas só se você tiver guardado a energia durante o dia dentro de baterias especiais.",
+      "link": ""
+    }
+  ],
+  "5ano": [
+    {
+      "pergunta": "Quantos litros de água são gastos para fabricar UMA calça jeans?",
+      "opcoes": ["100 Litros", "1.000 Litros", "10.000 Litros"],
+      "resposta": "10.000 Litros",
+      "curiosidade": "A plantação do algodão e o processo de tingir o tecido nas fábricas consomem muita água!",
+      "link": ""
+    },
+    {
+      "pergunta": "Quantos litros de água para fazer UM hambúrguer de carne de boi?",
+      "opcoes": ["500 Litros", "2.400 Litros", "10.000 Litros"],
+      "resposta": "2.400 Litros",
+      "curiosidade": "O boi bebe água, mas o que mais gasta é a água usada para irrigar a grama e a ração que o boi comeu a vida toda.",
+      "link": ""
+    },
+    {
+      "pergunta": "Quantos litros de água para fabricar UM Smartphone?",
+      "opcoes": ["10 Litros", "500 Litros", "12.000 Litros"],
+      "resposta": "12.000 Litros",
+      "curiosidade": "A mineração dos metais preciosos que ficam dentro do celular exige rios inteiros de água no processo.",
+      "link": ""
+    },
+    {
+      "pergunta": "De toda a água que existe no Planeta Terra, qual a porcentagem de Água Doce?",
+      "opcoes": ["2,5%", "50%", "97%"],
+      "resposta": "2,5%",
+      "curiosidade": "E desses 2,5%, a maior parte está congelada nas geleiras. A água que realmente podemos usar é muito pouca!",
+      "link": ""
+    },
+    {
+      "pergunta": "Qual setor gasta a maior parte da água do Brasil (cerca de 72%)?",
+      "opcoes": ["As casas", "As fábricas", "A Agricultura"],
+      "resposta": "A Agricultura",
+      "curiosidade": "Por isso, as invenções Maker de irrigação inteligente e sem desperdício são tão importantes para salvar o mundo.",
+      "link": ""
+    },
+    {
+      "pergunta": "O que é a Torre Warka Water?",
+      "opcoes": ["Uma caixa d'água de metal", "Uma torre de bambu que tira água da neblina", "Um encanamento no chão"],
+      "resposta": "Uma torre de bambu que tira água da neblina",
+      "curiosidade": "Na África, onde não tem rio, a neblina da manhã gruda na malha da torre e escorre até virar água potável!",
+      "link": "https://www.youtube.com/results?search_query=warka+water"
+    },
+    {
+      "pergunta": "Como funcionam as Fazendas Verticais no meio da cidade?",
+      "opcoes": ["Plantam na terra", "Usam 90% menos água", "Precisam de muita chuva"],
+      "resposta": "Usam 90% menos água",
+      "curiosidade": "A água fica girando em tubos fechados e não evapora no sol. E as plantas crescem com luzes de LED rosa!",
+      "link": "https://www.youtube.com/results?search_query=fazenda+vertical+pink+farms"
+    },
+    {
+      "pergunta": "Qual forma de irrigação economiza mais água nas fazendas?",
+      "opcoes": ["Pivô Central", "Mangueira comum", "Gotejamento Automático"],
+      "resposta": "Gotejamento Automático",
+      "curiosidade": "Uma mangueira com furinhos solta a gota de água exatamente em cima da raiz da planta, sem desperdiçar evaporando pelo ar.",
+      "link": ""
+    },
+    {
+      "pergunta": "Como o Besouro da Namíbia bebe água no deserto onde nunca chove?",
+      "opcoes": ["Suga de cactos", "Levanta a traseira e pega a neblina", "Fica meses sem beber"],
+      "resposta": "Levanta a traseira e pega a neblina",
+      "curiosidade": "A neblina bate nas costas dele e as gotículas escorrem direto para a sua boca. Engenheiros copiaram isso para criar garrafas especiais!",
+      "link": "https://www.youtube.com/results?search_query=namib+desert+beetle+water"
+    },
+    {
+      "pergunta": "O que é uma fábrica de Dessalinização?",
+      "opcoes": ["Fábrica de tirar sal da água do mar", "Fábrica de suco", "Fábrica de limpar rios"],
+      "resposta": "Fábrica de tirar sal da água do mar",
+      "curiosidade": "Em países muito secos, eles pegam a água do oceano e usam alta tecnologia para deixá-la doce e boa para beber.",
+      "link": "https://www.youtube.com/results?search_query=dessaliniza%C3%A7%C3%A3o+da+%C3%A1gua+do+mar+como+funciona"
+    }
+  ]
 }

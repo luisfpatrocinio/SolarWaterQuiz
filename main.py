@@ -2,6 +2,7 @@ import pygame
 import sys
 import json
 import os
+import webbrowser
 
 # --- CONFIGURAÇÕES INICIAIS ---
 pygame.init()
@@ -204,23 +205,34 @@ def main():
             msg = "RESPOSTA CORRETA!" if is_correct else "RESPOSTA INCORRETA!"
             color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
             
-            draw_text_center(msg, font_title, color_msg, 200)
+            draw_text_center(msg, font_title, color_msg, 150)
             
             # Mostrar curiosidade
             curiosidade = question_data["curiosidade"]
-            draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 400, SCREEN_WIDTH - 300)
+            draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 300, SCREEN_WIDTH - 300)
+            
+            # Botão Saiba Mais (Link)
+            link = question_data.get("link", "")
+            btn_link_rect = None
+            if link != "":
+                btn_link_rect = pygame.Rect(SCREEN_WIDTH // 2 - 400, 600, 800, 80)
+                color_link = COLOR_BTN_HOVER if btn_link_rect.collidepoint(mouse_pos) else (200, 100, 200)
+                draw_button(btn_link_rect, color_link, "[ Assistir Vídeo / Saiba Mais ]", font_button, COLOR_TEXT)
             
             # Botão Avançar
             btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 750, 400, 120)
             color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else (150, 150, 150)
             draw_button(btn_avancar_rect, color_avancar, "Avançar", font_button, COLOR_TEXT)
             
-            if mouse_clicked and btn_avancar_rect.collidepoint(mouse_pos):
-                current_question_index += 1
-                if current_question_index >= len(QUIZ_DATA[current_quiz]):
-                    current_state = STATE_END
-                else:
-                    current_state = STATE_QUESTION
+            if mouse_clicked:
+                if btn_avancar_rect.collidepoint(mouse_pos):
+                    current_question_index += 1
+                    if current_question_index >= len(QUIZ_DATA[current_quiz]):
+                        current_state = STATE_END
+                    else:
+                        current_state = STATE_QUESTION
+                elif btn_link_rect and btn_link_rect.collidepoint(mouse_pos):
+                    webbrowser.open(link)
         
         elif current_state == STATE_END:
             draw_text_center("FIM DE JOGO, TURMA!", font_title, (255, 220, 50), 300)
