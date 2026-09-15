@@ -215,13 +215,19 @@ def main():
                         current_state = STATE_FEEDBACK
             
         elif current_state == STATE_FEEDBACK:
-            msg = "VOCÊ ACERTOU!" if is_correct else "VOCÊ ERROU!"
+            question_data = QUIZ_DATA[current_quiz][current_question_index]
+            
+            msg = "RESPOSTA CORRETA! 🎉" if is_correct else "RESPOSTA INCORRETA! 😢"
             color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
             
-            draw_text_center(msg, font_title, color_msg, 300)
+            draw_text_center(msg, font_title, color_msg, 200)
+            
+            # Mostrar curiosidade
+            curiosidade = question_data["curiosidade"]
+            draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 400, SCREEN_WIDTH - 300)
             
             # Botão Avançar
-            btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 600, 400, 120)
+            btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 750, 400, 120)
             color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else (150, 150, 150)
             draw_button(btn_avancar_rect, color_avancar, "Avançar", font_button, COLOR_TEXT)
             
@@ -233,7 +239,21 @@ def main():
                     current_state = STATE_QUESTION
         
         elif current_state == STATE_END:
-            pass # Placeholder
+            draw_text_center("FIM DE JOGO, TURMA!", font_title, (255, 220, 50), 300)
+            
+            total_perguntas = len(QUIZ_DATA[current_quiz])
+            score_text = f"Vocês acertaram {score} de {total_perguntas} perguntas!"
+            draw_text_center(score_text, font_button, COLOR_TEXT, 500)
+            
+            # Botão Voltar ao Menu
+            btn_voltar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 300, 750, 600, 120)
+            color_voltar = COLOR_BTN_HOVER if btn_voltar_rect.collidepoint(mouse_pos) else (50, 150, 255)
+            draw_button(btn_voltar_rect, color_voltar, "Voltar ao Menu", font_button, COLOR_TEXT)
+            
+            if mouse_clicked and btn_voltar_rect.collidepoint(mouse_pos):
+                current_state = STATE_MENU
+                current_question_index = 0
+                score = 0
 
         # Atualizar Tela
         pygame.display.flip()
