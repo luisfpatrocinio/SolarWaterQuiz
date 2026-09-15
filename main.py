@@ -74,6 +74,22 @@ current_question_index = 0
 score = 0
 is_correct = False
 
+is_transitioning = False
+fade_alpha = 0
+fade_state = 1
+next_game_state = None
+fade_speed = 15
+
+fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+fade_surface.fill((0, 0, 0))
+
+def change_state(new_state):
+    global is_transitioning, fade_alpha, fade_state, next_game_state
+    next_game_state = new_state
+    is_transitioning = True
+    fade_alpha = 0
+    fade_state = 1
+
 # --- FUNÇÕES DE DESENHO ---
 def draw_text_wrapped(text, font, color, y_pos, max_width):
     words = text.split(' ')
@@ -118,6 +134,7 @@ btn_sair_rect = pygame.Rect(SCREEN_WIDTH // 2 - 150, 850, 300, 80)
 # --- LOOP PRINCIPAL ---
 def main():
     global current_state, current_quiz, current_question_index, score, is_correct, is_fullscreen
+    global is_transitioning, fade_alpha, fade_state, next_game_state
     
     running = True
     while running:
@@ -139,11 +156,11 @@ def main():
                     if current_state == STATE_MENU:
                         running = False
                     else:
-                        current_state = STATE_MENU
                         current_question_index = 0
                         score = 0
+                        change_state(STATE_MENU)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1: # Clique do botão esquerdo
+                if event.button == 1 and not is_transitioning: # Clique do botão esquerdo
                     mouse_clicked = True
                     
         # Limpar tela
@@ -171,12 +188,12 @@ def main():
                     current_quiz = "4ano"
                     current_question_index = 0
                     score = 0
-                    current_state = STATE_QUESTION
+                    change_state(STATE_QUESTION)
                 elif btn_5ano_rect.collidepoint(mouse_pos):
                     current_quiz = "5ano"
                     current_question_index = 0
                     score = 0
-                    current_state = STATE_QUESTION
+                    change_state(STATE_QUESTION)
                 elif btn_sair_rect.collidepoint(mouse_pos):
                     running = False
                     
@@ -215,7 +232,7 @@ def main():
                             is_correct = True
                         else:
                             is_correct = False
-                        current_state = STATE_FEEDBACK
+                        change_state(STATE_FEEDBACK)
             
         elif current_state == STATE_FEEDBACK:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
@@ -249,9 +266,9 @@ def main():
                 if btn_avancar_rect.collidepoint(mouse_pos):
                     current_question_index += 1
                     if current_question_index >= len(QUIZ_DATA[current_quiz]):
-                        current_state = STATE_END
+                        change_state(STATE_END)
                     else:
-                        current_state = STATE_QUESTION
+                        change_state(STATE_QUESTION)
                 elif btn_link_rect and btn_link_rect.collidepoint(mouse_pos):
                     webbrowser.open(link)
         
@@ -268,9 +285,23 @@ def main():
             draw_button(btn_voltar_rect, color_voltar, "Voltar ao Menu", font_button, COLOR_TEXT)
             
             if mouse_clicked and btn_voltar_rect.collidepoint(mouse_pos):
-                current_state = STATE_MENU
                 current_question_index = 0
                 score = 0
+                change_state(STATE_MENU)
+
+        # --- Lógica de Transição (Fade) ---
+        if is_transitioning:
+            fade_alpha += fade_speed * fade_state
+            if fade_alpha >= 255:
+                fade_alpha = 255
+                current_state = next_game_state
+                fade_state = -1
+            elif fade_alpha <= 0 and fade_state == -1:
+                fade_alpha = 0
+                is_transitioning = False
+            
+            fade_surface.set_alpha(fade_alpha)
+            screen.blit(fade_surface, (0, 0))
 
         # Atualizar Tela
         pygame.display.flip()
