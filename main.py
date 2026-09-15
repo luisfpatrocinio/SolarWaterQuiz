@@ -19,18 +19,21 @@ COLOR_BTN_4ANO = (255, 150, 50) # Laranja vibrante
 COLOR_BTN_5ANO = (50, 150, 255) # Azul vibrante
 COLOR_BTN_HOVER = (200, 200, 200)
 
-# Inicia a tela em modo Fullscreen (remova pygame.FULLSCREEN para modo janela, se precisar testar menor)
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+# Inicia a tela sem bordas, mas escalada para preencher a tela atual
+is_fullscreen = True
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME | pygame.SCALED)
 pygame.display.set_caption("Quiz Maker - Educacional")
 clock = pygame.time.Clock()
 
 # Fontes (Grandes para Datashow)
 try:
-    font_title = pygame.font.SysFont("arial", 120, bold=True)
-    font_button = pygame.font.SysFont("arial", 60, bold=True)
+    font_title = pygame.font.SysFont("arial", 90, bold=True)
+    font_button = pygame.font.SysFont("arial", 45, bold=True)
+    font_option = pygame.font.SysFont("arial", 35, bold=True)
 except:
-    font_title = pygame.font.Font(None, 120)
-    font_button = pygame.font.Font(None, 60)
+    font_title = pygame.font.Font(None, 90)
+    font_button = pygame.font.Font(None, 45)
+    font_option = pygame.font.Font(None, 35)
 
 # --- CARREGAMENTO DOS DADOS ---
 def load_questions():
@@ -109,7 +112,7 @@ btn_sair_rect = pygame.Rect(SCREEN_WIDTH // 2 - 150, 850, 300, 80)
 
 # --- LOOP PRINCIPAL ---
 def main():
-    global current_state, current_quiz, current_question_index, score, is_correct
+    global current_state, current_quiz, current_question_index, score, is_correct, is_fullscreen
     
     running = True
     while running:
@@ -121,7 +124,13 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_F11:
+                    is_fullscreen = not is_fullscreen
+                    if is_fullscreen:
+                        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME | pygame.SCALED)
+                    else:
+                        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SCALED)
+                elif event.key == pygame.K_ESCAPE:
                     if current_state == STATE_MENU:
                         running = False
                     else:
@@ -166,28 +175,27 @@ def main():
                     
         elif current_state == STATE_QUESTION:
             question_data = QUIZ_DATA[current_quiz][current_question_index]
-            draw_text_wrapped(question_data["pergunta"], font_title, COLOR_TEXT, 200, SCREEN_WIDTH - 200)
+            next_y = draw_text_wrapped(question_data["pergunta"], font_title, COLOR_TEXT, 100, SCREEN_WIDTH - 200)
             
             options = question_data["opcoes"]
             num_options = len(options)
             
-            # Dinamicamente calcular a posição dos botões
-            btn_w = 400 if num_options > 2 else 600
-            btn_h = 150
-            spacing = 50
-            total_width = (btn_w * num_options) + (spacing * (num_options - 1))
-            start_x = (SCREEN_WIDTH - total_width) // 2
+            # Botões das opções dispostos VERTICALMENTE para caber textos longos
+            btn_w = 1400
+            btn_h = 100
+            spacing = 30
+            start_y = max(400, next_y + 80)
             
             option_rects = []
             for i, option_text in enumerate(options):
-                rect = pygame.Rect(start_x + (btn_w + spacing) * i, 600, btn_w, btn_h)
+                rect = pygame.Rect((SCREEN_WIDTH - btn_w) // 2, start_y + (btn_h + spacing) * i, btn_w, btn_h)
                 option_rects.append((rect, option_text))
                 
                 # Check hover
                 color = COLOR_BTN_HOVER if rect.collidepoint(mouse_pos) else (COLOR_BTN_4ANO if current_quiz == "4ano" else COLOR_BTN_5ANO)
-                draw_button(rect, color, option_text, font_button, COLOR_TEXT)
+                draw_button(rect, color, option_text, font_option, COLOR_TEXT)
                 
-            draw_text_center(f"Pontuação da Sala: {score}", font_button, (200, 255, 200), SCREEN_HEIGHT - 100)
+            draw_text_center(f"Pontuação da Sala: {score}", font_button, (200, 255, 200), SCREEN_HEIGHT - 60)
             
             if mouse_clicked:
                 for rect, option_text in option_rects:
@@ -205,22 +213,25 @@ def main():
             msg = "RESPOSTA CORRETA!" if is_correct else "RESPOSTA INCORRETA!"
             color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
             
-            draw_text_center(msg, font_title, color_msg, 150)
+            draw_text_center(msg, font_title, color_msg, 120)
             
             # Mostrar curiosidade
             curiosidade = question_data["curiosidade"]
-            draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 300, SCREEN_WIDTH - 300)
+            next_y = draw_text_wrapped(curiosidade, font_button, COLOR_TEXT, 220, SCREEN_WIDTH - 300)
+            
+            button_y = max(550, next_y + 60)
             
             # Botão Saiba Mais (Link)
             link = question_data.get("link", "")
             btn_link_rect = None
             if link != "":
-                btn_link_rect = pygame.Rect(SCREEN_WIDTH // 2 - 400, 600, 800, 80)
+                btn_link_rect = pygame.Rect(SCREEN_WIDTH // 2 - 400, button_y, 800, 80)
                 color_link = COLOR_BTN_HOVER if btn_link_rect.collidepoint(mouse_pos) else (200, 100, 200)
                 draw_button(btn_link_rect, color_link, "[ Assistir Vídeo / Saiba Mais ]", font_button, COLOR_TEXT)
+                button_y += 120
             
             # Botão Avançar
-            btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 750, 400, 120)
+            btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, button_y, 400, 100)
             color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else (150, 150, 150)
             draw_button(btn_avancar_rect, color_avancar, "Avançar", font_button, COLOR_TEXT)
             
