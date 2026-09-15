@@ -38,6 +38,7 @@ def get_font(size):
 font_title = get_font(90)
 font_button = get_font(45)
 font_option = get_font(35)
+font_credits = get_font(25)
 
 # --- CARREGAMENTO DOS DADOS ---
 def load_questions():
@@ -161,6 +162,8 @@ def main():
             
             color_sair = COLOR_BTN_HOVER if btn_sair_rect.collidepoint(mouse_pos) else COLOR_BTN_OPTION
             draw_button(btn_sair_rect, color_sair, "Sair", font_button, COLOR_TEXT)
+            
+            draw_text_center("Criado por PatrocinioLuisF", font_credits, COLOR_TEXT, SCREEN_HEIGHT - 40)
             
             # Lógica de Clique no Menu
             if mouse_clicked:
