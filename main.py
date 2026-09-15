@@ -84,8 +84,28 @@ current_state = STATE_MENU
 current_quiz = None
 current_question_index = 0
 score = 0
+is_correct = False
 
 # --- FUNÇÕES DE DESENHO ---
+def draw_text_wrapped(text, font, color, y_pos, max_width):
+    words = text.split(' ')
+    lines = []
+    current_line = []
+    for word in words:
+        current_line.append(word)
+        if font.size(' '.join(current_line))[0] > max_width:
+            current_line.pop()
+            lines.append(' '.join(current_line))
+            current_line = [word]
+    if current_line:
+        lines.append(' '.join(current_line))
+    
+    y_offset = y_pos
+    for line in lines:
+        draw_text_center(line, font, color, y_offset)
+        y_offset += font.size(line)[1] + 10
+    return y_offset
+
 def draw_text_center(text, font, color, y_pos):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, y_pos))
@@ -109,7 +129,7 @@ btn_sair_rect = pygame.Rect(SCREEN_WIDTH // 2 - 150, 850, 300, 80)
 
 # --- LOOP PRINCIPAL ---
 def main():
-    global current_state, current_quiz, current_question_index, score
+    global current_state, current_quiz, current_question_index, score, is_correct
     
     running = True
     while running:
@@ -160,12 +180,57 @@ def main():
                     running = False
                     
         elif current_state == STATE_QUESTION:
-            # Placeholder para a tela de pergunta
-            draw_text_center("TELA DE PERGUNTA (EM BREVE)", font_title, COLOR_TEXT, SCREEN_HEIGHT // 2)
-            draw_text_center("Pressione ESC para sair", font_button, (200, 200, 200), SCREEN_HEIGHT // 2 + 100)
+            question_data = QUIZ_DATA[current_quiz][current_question_index]
+            draw_text_wrapped(question_data["pergunta"], font_title, COLOR_TEXT, 200, SCREEN_WIDTH - 200)
+            
+            options = question_data["opcoes"]
+            num_options = len(options)
+            
+            # Dinamicamente calcular a posição dos botões
+            btn_w = 400 if num_options > 2 else 600
+            btn_h = 150
+            spacing = 50
+            total_width = (btn_w * num_options) + (spacing * (num_options - 1))
+            start_x = (SCREEN_WIDTH - total_width) // 2
+            
+            option_rects = []
+            for i, option_text in enumerate(options):
+                rect = pygame.Rect(start_x + (btn_w + spacing) * i, 600, btn_w, btn_h)
+                option_rects.append((rect, option_text))
+                
+                # Check hover
+                color = COLOR_BTN_HOVER if rect.collidepoint(mouse_pos) else (COLOR_BTN_4ANO if current_quiz == "4ano" else COLOR_BTN_5ANO)
+                draw_button(rect, color, option_text, font_button, COLOR_TEXT)
+                
+            draw_text_center(f"Pontuação da Sala: {score}", font_button, (200, 255, 200), SCREEN_HEIGHT - 100)
+            
+            if mouse_clicked:
+                for rect, option_text in option_rects:
+                    if rect.collidepoint(mouse_pos):
+                        if option_text == question_data["resposta"]:
+                            score += 1
+                            is_correct = True
+                        else:
+                            is_correct = False
+                        current_state = STATE_FEEDBACK
             
         elif current_state == STATE_FEEDBACK:
-            pass # Placeholder
+            msg = "VOCÊ ACERTOU!" if is_correct else "VOCÊ ERROU!"
+            color_msg = (100, 255, 100) if is_correct else (255, 100, 100)
+            
+            draw_text_center(msg, font_title, color_msg, 300)
+            
+            # Botão Avançar
+            btn_avancar_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 600, 400, 120)
+            color_avancar = COLOR_BTN_HOVER if btn_avancar_rect.collidepoint(mouse_pos) else (150, 150, 150)
+            draw_button(btn_avancar_rect, color_avancar, "Avançar", font_button, COLOR_TEXT)
+            
+            if mouse_clicked and btn_avancar_rect.collidepoint(mouse_pos):
+                current_question_index += 1
+                if current_question_index >= len(QUIZ_DATA[current_quiz]):
+                    current_state = STATE_END
+                else:
+                    current_state = STATE_QUESTION
         
         elif current_state == STATE_END:
             pass # Placeholder
