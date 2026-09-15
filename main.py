@@ -83,12 +83,15 @@ fade_speed = 15
 fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 fade_surface.fill((0, 0, 0))
 
+frozen_screen = None
+
 def change_state(new_state):
-    global is_transitioning, fade_alpha, fade_state, next_game_state
+    global is_transitioning, fade_alpha, fade_state, next_game_state, frozen_screen
     next_game_state = new_state
     is_transitioning = True
     fade_alpha = 0
     fade_state = 1
+    frozen_screen = screen.copy()
 
 # --- FUNÇÕES DE DESENHO ---
 def draw_text_wrapped(text, font, color, y_pos, max_width):
@@ -167,7 +170,9 @@ def main():
         screen.fill(COLOR_BG)
         
         # Lógica de Renderização por Estado
-        if current_state == STATE_MENU:
+        if is_transitioning and fade_state == 1 and frozen_screen:
+            screen.blit(frozen_screen, (0, 0))
+        elif current_state == STATE_MENU:
             draw_text_center("QUIZ MAKER", font_title, COLOR_BTN_SOLAR, 200)
             
             # Checar hover (mouse em cima do botão) e desenhar
