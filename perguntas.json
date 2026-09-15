@@ -1,0 +1,42 @@
+{
+    "4ano": [
+        {
+            "pergunta": "Placa solar funciona em dias nublados e com chuva.",
+            "opcoes": ["Mito", "Verdade"],
+            "resposta": "Verdade",
+            "curiosidade": "Gera menos energia, mas a luz que atravessa a nuvem ainda gera eletricidade!"
+        },
+        {
+            "pergunta": "As placas solares duram para sempre.",
+            "opcoes": ["Mito", "Verdade"],
+            "resposta": "Mito",
+            "curiosidade": "Elas duram de 25 a 30 anos, depois precisam ser recicladas."
+        },
+        {
+            "pergunta": "Dá para usar energia solar à noite.",
+            "opcoes": ["Mito", "Verdade"],
+            "resposta": "Verdade",
+            "curiosidade": "Sim! Mas só se você tiver guardado a energia durante o dia em baterias gigantes."
+        }
+    ],
+    "5ano": [
+        {
+            "pergunta": "Quantos litros de água são gastos para fazer UMA calça jeans?",
+            "opcoes": ["100 Litros", "1.000 Litros", "10.000 Litros"],
+            "resposta": "10.000 Litros",
+            "curiosidade": "A plantação do algodão e as fábricas de tecido consomem muita água!"
+        },
+        {
+            "pergunta": "Quantos litros de água para fazer UM Hambúrguer de carne?",
+            "opcoes": ["500 Litros", "2.400 Litros", "10.000 Litros"],
+            "resposta": "2.400 Litros",
+            "curiosidade": "O boi bebe muita água e come muita grama que precisou ser irrigada."
+        },
+        {
+            "pergunta": "Quantos litros de água para fabricar UM Smartphone?",
+            "opcoes": ["10 Litros", "500 Litros", "12.000 Litros"],
+            "resposta": "12.000 Litros",
+            "curiosidade": "A mineração dos metais preciosos do celular exige rios inteiros de água."
+        }
+    ]
+}

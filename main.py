@@ -1,5 +1,7 @@
 import pygame
 import sys
+import json
+import os
 
 # --- CONFIGURAÇÕES INICIAIS ---
 pygame.init()
@@ -29,49 +31,26 @@ except:
     font_title = pygame.font.Font(None, 120)
     font_button = pygame.font.Font(None, 60)
 
-# --- DADOS DAS PERGUNTAS ---
-QUIZ_DATA = {
-    "4ano": [
-        {
-            "pergunta": "Placa solar funciona em dias nublados e com chuva.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Verdade",
-            "curiosidade": "Gera menos energia, mas a luz que atravessa a nuvem ainda gera eletricidade!"
-        },
-        {
-            "pergunta": "As placas solares duram para sempre.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Mito",
-            "curiosidade": "Elas duram de 25 a 30 anos, depois precisam ser recicladas."
-        },
-        {
-            "pergunta": "Dá para usar energia solar à noite.",
-            "opcoes": ["Mito", "Verdade"],
-            "resposta": "Verdade",
-            "curiosidade": "Sim! Mas só se você tiver guardado a energia durante o dia em baterias gigantes."
-        }
-    ],
-    "5ano": [
-        {
-            "pergunta": "Quantos litros de água são gastos para fazer UMA calça jeans?",
-            "opcoes": ["100 Litros", "1.000 Litros", "10.000 Litros"],
-            "resposta": "10.000 Litros",
-            "curiosidade": "A plantação do algodão e as fábricas de tecido consomem muita água!"
-        },
-        {
-            "pergunta": "Quantos litros de água para fazer UM Hambúrguer de carne?",
-            "opcoes": ["500 Litros", "2.400 Litros", "10.000 Litros"],
-            "resposta": "2.400 Litros",
-            "curiosidade": "O boi bebe muita água e come muita grama que precisou ser irrigada."
-        },
-        {
-            "pergunta": "Quantos litros de água para fabricar UM Smartphone?",
-            "opcoes": ["10 Litros", "500 Litros", "12.000 Litros"],
-            "resposta": "12.000 Litros",
-            "curiosidade": "A mineração dos metais preciosos do celular exige rios inteiros de água."
-        }
-    ]
-}
+# --- CARREGAMENTO DOS DADOS ---
+def load_questions():
+    file_path = "perguntas.json"
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Erro ao ler perguntas.json: {e}")
+    else:
+        print("Arquivo perguntas.json não encontrado!")
+        
+    print("Carregando perguntas de reserva (fallback)...")
+    # Fallback caso o arquivo não exista ou esteja corrompido
+    return {
+        "4ano": [{"pergunta": "Pergunta de teste 4º Ano?", "opcoes": ["A", "B"], "resposta": "A", "curiosidade": "Teste de fallback."}],
+        "5ano": [{"pergunta": "Pergunta de teste 5º Ano?", "opcoes": ["A", "B"], "resposta": "B", "curiosidade": "Teste de fallback."}]
+    }
+
+QUIZ_DATA = load_questions()
 
 # --- MÁQUINA DE ESTADOS (STATE MACHINE) ---
 STATE_MENU = "MENU"
